@@ -1,0 +1,25 @@
+
+robocopy M:\ D:\ /MIR /Z /XA:SH /XJD /XD "M:\System Volume Information" /PURGE
+
+robocopy M:\Music D:\Music /MIR /Z /XA:SH /XJD /XD "M:\System Volume Information" /PURGE
+
+robocopy M:\Music D:\Music /MIR /Z /XA:SH /XJD
+
+robocopy M:\ N:\ /MIR /Z /XA:SH /XJD /XD "$RECYCLE.BIN" "System Volume Information" /NFL /NDL /NC /NS
+
+ROBOCOPY C:\Users \\HomeServer\Backup\Windows-PC\Users /DCOPY:DA /MIR /FFT /Z /XA:SH /R:0 /TEE /XJD /XD AppData /XD OneDrive /XD SkyDrive
+
+C:\Users – It is the directory which I want to sync
+\\HomeServer\Backup\Windows-PC\Users – Server Name is “HomeServer”, Share name is “Backup” and directory under Backup is “Windows-PC\Users”.
+
+/DCOPY:DA – Copy Data and Attributes.
+/MIR – It mirrors the entire directory tree C:\Users in destination. It also deletes destination files which no longer exists in C:\Users.
+/FFT – This is to support FAT file systems which needs a tweak to support timestamp validation by copy logic in robocopy tool.
+/Z – Copy operation can be resumed after termination.
+/XA:SH – Exclude System (S) files and Hidden (H) files
+/R:0 – Number of retries on failed copy operation. By default it does retry for 1 million times, which is useful in poor network.
+/TEE – Output to console window and log file – In this case I haven’t used log file. You have to add “/LOG:file” option too.
+/XJD – excluding Junction Points (symbolic link) of directories from copying
+/XD AppData /XD OneDrive /XD SkyDrive – list of directories to be excluded from copying
+
+

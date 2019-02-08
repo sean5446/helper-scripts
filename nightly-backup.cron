@@ -1,0 +1,5 @@
+# 8pm
+0 20 * * * /root/backup.sh
+# 10pm
+0 22 * * * /root/backup.sh
+

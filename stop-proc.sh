@@ -11,4 +11,5 @@ else
   kill $PID
 fi
 
+sleep 1
 ps aux | grep sqri | grep -v grep

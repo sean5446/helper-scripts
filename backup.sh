@@ -33,7 +33,7 @@ mountret=$?
 
 if [ 0 -eq $mountret ] ; then
   /bin/echo "rsync starting" >> $logfile
-  /usr/bin/rsync --exclude 'System Volume Information' --exclude 'Recovery' --delete -az $rmirror $lmirror
+  /usr/bin/rsync --exclude '$RECYCLE.BIN' --exclude 'System Volume Information' --exclude 'Recovery' --delete -az $rmirror $lmirror
   # can also use --delete-after
   /bin/echo "rsync  $?" >> $logfile
   /bin/umount $rmirror

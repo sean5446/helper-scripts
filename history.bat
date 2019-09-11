@@ -1,1 +1,0 @@
-doskey /history

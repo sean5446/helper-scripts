@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "stopping bluetooth"
+service bluetooth stop
+echo "stopping networking"
+service networking stop
+echo "stopping swapfile"
+service dphys-swapfile stop
+echo "stopping ssh"
+service ssh stop
+echo "stopping dhcpcd"
+service dhcpcd stop
+echo "stopping avahi-daemon"
+service avahi-daemon stop
+echo "stopping rsyslog"
+service rsyslog stop
+echo "stopping triggerhappy"
+service triggerhappy stop
+echo "stopping fake-hwclock"
+service fake-hwclock stop
+
+service --status-all

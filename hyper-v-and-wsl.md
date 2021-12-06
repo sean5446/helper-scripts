@@ -1,7 +1,10 @@
 ### Hyper V:
 Set-VM -VMName "Ubuntu 20.04" -EnhancedSessionTransportType HvSocket
+
 sudo apt-get install xrdp
+
 sudo systemctl enable xrdp
+
 (don't auto-login)
 
 

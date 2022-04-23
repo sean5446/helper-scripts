@@ -1,4 +1,4 @@
-### Hyper V:
+# Hyper V
 ## VM install
 - generation 2 - don't enable secure boot
 - don't auto-login
@@ -6,11 +6,12 @@
 
 sudo apt-get install \
 vim build-essential python3-pip xrdp htop git openssh-server zsh
+sudo systemctl enable xrdp
 
 wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/20.04/install.sh 
-
-sudo systemctl enable xrdp
 ```
+
+## Windows
 
 Powershell (elevated)
 

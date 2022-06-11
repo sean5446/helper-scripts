@@ -1,6 +1,6 @@
 
-# echo environmental stuff
 echo $PSVersionTable | findstr "PSVersion"
+
 echo "Profile: $PROFILE" 
 
 # stylize powershell console with oh-my-posh
@@ -32,6 +32,10 @@ function ifconfig()
 function grep($pat, $path)
 {
     Select-String -Path $path -Pattern $pat
+}
+
+function rm($path) {
+    Remove-Item -Force -Recurse -LiteralPath $path 
 }
 
 # function find($pat)

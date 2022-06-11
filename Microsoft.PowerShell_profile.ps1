@@ -31,7 +31,8 @@ function ifconfig()
 
 function grep($pat, $path)
 {
-    Select-String -Path $path -Pattern $pat
+    # doesn't work for single files with recurse
+    Get-ChildItem -Recurse $path/* | Select-String -Pattern $pat
 }
 
 function rm($path) {

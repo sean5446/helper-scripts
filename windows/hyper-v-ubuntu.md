@@ -1,5 +1,5 @@
 # Hyper V
-## VM install
+## Ubuntu install
 - generation 2 - don't enable secure boot
 - don't auto-login
 ```sh
@@ -11,7 +11,7 @@ sudo systemctl enable xrdp
 wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/20.04/install.sh 
 ```
 
-## Windows
+## On Windows Host
 
 Powershell (elevated)
 

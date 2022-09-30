@@ -3,13 +3,14 @@ sudo apt-get install zerofree
 ```
 
 ```
-sudo mount /dev/sdc -o remount,ro
-zerofree -v /dev/sdc
+sudo mount /dev/sdb -o remount,ro
+zerofree -v /dev/sdb
 ```
 
 ```
 DISKPART> select vdisk file="C:\Users\queso\AppData\Local\Packages\...\LocalState\ext4.vhdx"
 ```
+
 or:
 ```
 wsl --shutdown

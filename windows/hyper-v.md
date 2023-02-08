@@ -17,6 +17,10 @@ Powershell (elevated)
 
 `Set-VM -VMName "Ubuntu 22.04" -EnhancedSessionTransportType HvSocket`
 
+To allow virtualization/virtualbox:
+
+`Get-VM | where Name -eq "your_vm_name" | Set-VMProcessor -ExposeVirtualizationExtensions $true`
+
 
 ## File
 

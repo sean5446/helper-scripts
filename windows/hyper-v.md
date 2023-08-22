@@ -1,30 +1,48 @@
-# Hyper V
-## Ubuntu install
-- generation 2 - don't enable secure boot
-- don't auto-login
+# Hyper-V Ubuntu 22.04 Installation
+
+## Ubuntu Install
+- Hyper-V: can use generation 2 hardware
+- Hyper-V: disable secure boot
+- During Ubuntu install: disable auto-login at startup
+
 ```sh
+sudo apt-get update && sudo apt-get upgrade -y
 
 sudo apt-get install \
-vim build-essential python3-pip xrdp htop git openssh-server zsh
+  vim build-essential python3-pip python3-venv htop git openssh-server zsh curl wget xrdp 
 sudo systemctl enable xrdp
 
-wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/20.04/install.sh 
+wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/20.04/install.sh
+sudo ./install.sh
 ```
+
+If you want to login from a remote computer, check: `/etc/xrdp/xrdp.ini`
+
+Note: the TCP endpoint for remote, as well as vsock for local:
+
+`port=vsock://-1:3389 tcp://:3389`
+
+`sudo systemctl restart xrdp` or just reboot later
+
+Oh my zsh install:
+https://ohmyz.sh/#install
 
 ## On Windows Host
 
-Powershell (elevated)
+From Powershell (elevated)
+
+To allow xrdp to work from startup:
 
 `Set-VM -VMName "Ubuntu 22.04" -EnhancedSessionTransportType HvSocket`
 
 To allow virtualization/virtualbox:
 
-`Get-VM | where Name -eq "your_vm_name" | Set-VMProcessor -ExposeVirtualizationExtensions $true`
+`Get-VM | where Name -eq "Ubuntu 22.04" | Set-VMProcessor -ExposeVirtualizationExtensions $true`
 
-
-## File
+## Ubuntu Helpers Install File
 
 https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/20.04/install.sh 
+
 ```
 #!/bin/bash
 

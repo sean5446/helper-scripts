@@ -1,4 +1,6 @@
 syntax on
+colorscheme elflord
 set tabstop=4
 set expandtab
-colorscheme elflord
+set relativenumber
+set mouse=a

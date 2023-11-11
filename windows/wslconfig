@@ -2,10 +2,11 @@
 
 [wsl2]
 memory=16G
+autoProxy=true
+networkingmode=mirrored
+dnsTunneling=true
+firewall=true
+
 [experimental]
 autoMemoryReclaim=gradual
 sparseVhd=true
-autoProxy=true
-#networkingmode=mirrored # insider only
-#dnsTunne1ing=true # insider only
-#firewall=true # insider only

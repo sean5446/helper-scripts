@@ -1,4 +1,6 @@
 # C:\Users\queso\.wslconfig
+# sudo vim /etc/ssh/sshd_config - Port 2222
+# netsh advfirewall firewall add rule name="WSL2 SSH" dir=in action=allow protocol=TCP localport=2222
 
 [wsl2]
 memory=16G

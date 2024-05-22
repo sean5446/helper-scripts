@@ -1,3 +1,5 @@
+# requirements.txt: pysmb
+
 # Drive the type inside Drive.compare_to_drive 
 from __future__ import annotations
 

@@ -1,6 +1,13 @@
 #!/bin/bash
+
+# usage: find ~/src/trade-engine/src/com/company/webservices/rest/v2 -name "*.java" | xargs zsh test.sh
+
 for x in $*; do
-  (cat copyright.txt; echo; cat $x) > /tmp/file; mv /tmp/file $x
+  head -n 5 $x | grep -qi "copyright";
+  if [[ $? -eq 1 ]]; then
+    echo "Adding copyright: $x";
+    (cat copyright.txt; echo; cat $x) > /tmp/file; mv /tmp/file $x
+  fi
 done
 
 # example of copyright.txt:

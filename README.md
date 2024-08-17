@@ -4,11 +4,9 @@ Helper scripts for Windows, Linux, Mac, raspberrypi, etc.
 
 ## One Liners
 
-### Python HTTP Server
+### HTTP Servers
 
 `python3 -m http.server 8080`
-
-### PHP HTTP Server
 
 `nohup php -S 0.0.0.0:8011 &`
 
@@ -49,7 +47,12 @@ log_statement = 'mod'
 
 `jhome() { newhome=J_HOME$1; export JAVA_HOME=${(P)newhome}; file $JAVA_HOME }`
 
-### Windows Remote Desktop Entries
+### Windows 
+Remote Desktop Entries
+
 `Computer\HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default`
 
+Quick hard drive perf test
+
+`winsat disk -drive g`
 

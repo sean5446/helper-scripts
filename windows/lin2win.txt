@@ -1,3 +1,0 @@
-history = doskey /history
-ifconfig = ipconfig
-cat = type

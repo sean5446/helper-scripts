@@ -35,7 +35,7 @@ logging_collector = on
 log_statement = 'mod'
 ```
 
-### Packages
+### Apt
 `dpkg -L` find location of installed package
 
 `apt-cache search keyword`
@@ -48,4 +48,8 @@ log_statement = 'mod'
 `killport() { lsof -ti :$1 | xargs kill -9 }`
 
 `jhome() { newhome=J_HOME$1; export JAVA_HOME=${(P)newhome}; file $JAVA_HOME }`
+
+### Windows Remote Desktop Entries
+`Computer\HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default`
+
 

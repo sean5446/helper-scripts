@@ -10,14 +10,22 @@ sudo apt-get update && sudo apt-get upgrade -y
 
 sudo apt-get install xrdp vim 
 
+sudo vim /etc/xrdp/xrdp.ini  # for remote xrdp
+port=vsock://-1:3389 tcp://:3389
+
 sudo systemctl enable xrdp
+sudo /etc/init.d/xrdp start
 ```
 
 ## Fix blank screen at startup (add to top of file)
 ```sh
-vim /etc/xrdp/startwm.sh
+sudo vim /etc/xrdp/startwm.sh
 export GNOME_SHELL_SESSION_MODE=ubuntu
 export XDG_CURRENT_DESKTOP=ubuntu:GNOME
+
+sudo vim /etc/default/grub
+remove quiet nosplash
+sudo update-grub
 ```
 
 ## Fix issue where UI apps take 1min to launch

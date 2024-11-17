@@ -36,3 +36,10 @@ sudo systemctl enable --global dbus-broker.service
 sudo apt-get install \
   build-essential python3-pip python3-venv htop git openssh-server zsh curl wget 
 ```
+
+## IntelliJ Keybindings
+Unbind navigate forward and backward
+```
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left "[]"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right "[]"
+```

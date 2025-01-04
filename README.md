@@ -10,6 +10,9 @@ Helper scripts for Windows, Linux, Mac, raspberrypi, etc.
 
 `nohup php -S 0.0.0.0:8011 &`
 
+### Remove Windows Characters
+`perl -p -i -e 's/\r\n$/\n/g' file.sh`
+
 ### Postgres
 `alias postgres_log="ls -l ../log/postgresql* | tail -n 1 | awk -F' ' '{print \$9}' | xargs tail -n 50 -f"`
 

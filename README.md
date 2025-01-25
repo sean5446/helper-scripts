@@ -28,6 +28,8 @@ Helper scripts for Windows, Linux, Mac, raspberrypi, etc.
 
 `\c name` select database
 
+`\dn` show schemas
+
 `\dt` list tables
 
 ```

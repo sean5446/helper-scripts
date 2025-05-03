@@ -30,9 +30,13 @@ Helper scripts for Windows, Linux, Mac, raspberrypi, etc.
 
 `\dn` show schemas
 
-`SET search_path TO schema_name;`
+`SET search_path TO schema_name;` set default schema
 
 `\dt` list tables
+
+`\df` show functions 
+
+`\sf function_name` show function declaration
 
 ```
 /opt/homebrew/var/postgresql@13/postgresql.conf

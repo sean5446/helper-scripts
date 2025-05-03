@@ -30,6 +30,8 @@ Helper scripts for Windows, Linux, Mac, raspberrypi, etc.
 
 `\dn` show schemas
 
+`SET search_path TO schema_name;`
+
 `\dt` list tables
 
 ```

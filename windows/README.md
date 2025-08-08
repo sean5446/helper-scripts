@@ -1,5 +1,13 @@
 # Windows Stuff
 
+## Zsh in MinGW for Git Bash
+Download zsh https://packages.msys2.org/packages/zsh?repo=msys&variant=x86_64
+
+Extract files and copy `usr` and `etc` to `C:\Program Files\Git`
+
+Edit `~/.bash_profile` and add `exec zsh` to end of file
+
+
 ## Edit Remote Desktop Connections
 ```
 HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default

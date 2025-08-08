@@ -42,3 +42,12 @@ taskmgr can end processes like "Network Connection Flow"
 
 ipconfig /release can disconnect network
 
+
+## Remote Desktop Entries
+
+GetKey delete entries from `Computer\HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default`
+
+## Quick hard drive perf test
+
+`winsat disk -drive g`
+

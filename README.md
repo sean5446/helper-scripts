@@ -58,3 +58,13 @@ log_statement = 'mod'
 
 `jhome() { newhome=J_HOME$1; export JAVA_HOME=${(P)newhome}; file $JAVA_HOME }`
 
+```sh
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias grep='grep --color=auto --exclude-dir={.git,.idea,.venv,venv,node_modules}'
+alias git_alias='git --no-pager config --get-regexp ^alias'
+
+alias postgres_log="ls -l $POSTGRES_HOME/log/postgresql* | tail -n 1 | awk -F' ' '{print \$9}' | xargs tail -n 50 -f"
+alias postgres_config="code $POSTGRES_HOME/postgresql.conf"
+```

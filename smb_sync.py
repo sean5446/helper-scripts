@@ -3,10 +3,12 @@
 # Drive the type inside Drive.compare_to_drive 
 from __future__ import annotations
 
+import sys
 import time
 import os
 import shutil
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 from typing import Callable, Optional
 from abc import ABC, abstractmethod
@@ -42,18 +44,18 @@ class Drive(ABC):
         rest_of_path = "/" + "/".join(full_path.split("/")[1:])
         return share, rest_of_path
     
-    def compare_to_drive(self, other: Drive, path: str = None) -> tuple[set[str], set[str]]:
-        if path is not None:
-            if self.base_path != path:
-                self.scan(path)
-            if other.base_path != path:
-                other.scan(path)
+    def compare_to_drive(self, other: Drive, path: str = '') -> tuple[set[str], set[str]]:
+        if len(self.contents) == 0:
+            self.scan(path)
+        if len(other.contents) == 0:
+            other.scan(path)
+        if len(self.contents) == 0 or len(other.contents) == 0:
+            raise ValueError("Both drives must have contents scanned before comparison")
         if self.base_path is None or other.base_path is None or self.base_path != other.base_path:
             raise ValueError(f"Both drives must have same the same base path {self.base_path} {other.base_path}")
-        if self.contents is None or other.contents is None:
-            raise ValueError("Both drives must be scanned before comparing")
-        unique_to_self = self.contents - other.contents
+
         unique_to_other = other.contents - self.contents
+        unique_to_self = self.contents - other.contents
         return unique_to_self, unique_to_other
     
     def copy(self, src_drive: Drive, src_path: str, dest_drive: Drive, dest_path: str) -> None:
@@ -88,6 +90,7 @@ class Local(Drive):
     def __init__(self, root: str, friendly_name: str = "Local") -> None:
         self.root = root
         self.friendly_name = friendly_name
+        self.contents = set()
 
     def _fmt_path(self, path: str) -> str:
         path = path.replace("\\", "/").replace(self.root, "") # convert windows slashes and remote root
@@ -128,10 +131,12 @@ class Local(Drive):
 
 class SMB(Drive):
 
-    def __init__(self, username: str, password: str, remote_host: str) -> None:
+    def __init__(self, username: str, password: str, remote_host: str, friendly_name: str = 'SMB') -> None:
         self.conn = SMBConnection(username, password, 'my_name', 'remote_name')
         assert self.conn.connect(remote_host, timeout=3)
         self.remote_host = remote_host
+        self.friendly_name = friendly_name if friendly_name else f"SMB {remote_host}"
+        self.contents = set()
 
     def _recursive_list(self, share: str, path: str, contents: set[str], func: Callable[[str], None] | None) -> set[str]:
         for x in self.conn.listPath(share, path):
@@ -149,7 +154,7 @@ class SMB(Drive):
                     self.contents.add(share + path + x.filename)
         return self.contents
 
-    def scan(self, path: str = "/", func: Callable[[str], None] = None) -> set[str]:
+    def scan(self, path: str = "/", func: Callable[[str], None] | None = None) -> set[str]:
         self.contents = set()
         self.base_path = path
         if path == "/":
@@ -180,43 +185,63 @@ class SMB(Drive):
 
 if __name__ == "__main__":
     start_time = time.time()
-    compare_path = "Video"
-    remote = SMB("", "", "192.168.50.1")
-    local = Local("M:/")
-    usb = Local("H:/", "USB")
+
+    username = os.getenv("SMB_USER", "username")
+    password = os.getenv("SMB_PASS", "password")
+    remote_smb_ip = os.getenv("SMB_IP", "192.168.50.1")
+    debug = os.getenv("SMB_DEBUG", False)
+    if debug:
+        logging.basicConfig(level=logging.DEBUG)
+    compare_path = None
+
+    if len(sys.argv) > 1:
+        compare_path = sys.argv[1]
+
+    if len(sys.argv) > 4:
+        username = sys.argv[2]
+        password = sys.argv[3]
+        remote_smb_ip = sys.argv[4]
+
+    if not compare_path or not username or not password or not remote_smb_ip:
+        print("Usage: smb_sync.py <path> (with SMB_USER, SMB_PASS, SMB_IP environment variables set)")
+        sys.exit(1)
+
+    remote = SMB(username, password, remote_smb_ip)
+    local = Local("/mnt/m")
+    usb = Local("/mnt/d", "USB")
 
     # remove junk (txt, jpg, Thumbs.db, html etc.) - super dangerous on the wrong folder
-    video_safe_list = {".srt", ".mp4", ".avi", ".mkv", ".m4v", ".divx", ".mpg"}
-    for drive in (remote, local, usb):
-        drive.clean(compare_path, video_safe_list, dry_run=True)
-    print()
+    #usb.clean(compare_path, {".srt", ".mp4", ".avi", ".mkv", ".m4v", ".divx", ".mpg"})
 
-    # scan drives
-    for drive in (remote, local, usb):
-        drive.scan(compare_path)
-        print(drive)
-        print(len(drive.contents))
-    print()
+    # find differences drives 1:1 
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        usb_future = executor.submit(local.compare_to_drive, usb, compare_path)
+        remote_future = executor.submit(local.compare_to_drive, remote, compare_path)
+        local_not_usb, usb_not_local = usb_future.result()
+        local_not_remote, remote_not_local = remote_future.result()
 
-    # find differences in drives - can only compare 1:1 currently
-    remote_not_local, local_not_remote = remote.compare_to_drive(local)
-    local_not_usb, usb_not_local = local.compare_to_drive(usb)
-    remote_not_usb, usb_not_remote = remote.compare_to_drive(usb)
+    print(f"{local.friendly_name} contents size {len(local.contents)}")
+    print(f"{usb.friendly_name} contents size {len(usb.contents)}")
+    print(f"{remote.friendly_name} contents size {len(remote.contents)}")
 
-    for x in remote_not_local:
-        print(f"Remote not local: {x}")
+    for x in local_not_usb:
+        print(f"Local not usb: {x}")
 
     for x in usb_not_local:
         print(f"USB not local: {x}")
 
-    for x in remote_not_usb:
-        print(f"Remote not usb: {x}")
+    for x in local_not_remote:
+        print(f"Local not remote: {x}")
+    
+    for x in remote_not_local:
+        print(f"Remote not local: {x}")
 
-    # TODO align drives
-    # maybe the file was moved? maybe check if os.path.basename(x) exist in both unique sets
+    # TODO automatically try to align drives
+    # should probably add md5 and last modified time for comparisons too
+    # ideally try to find if a file was moved rather than delete/copy
+
     # remote.copy(remote, "Video/remote.txt", local, "Video/remote.txt")
     # remote.copy(local, "Video/local.txt", remote, "Video/local.txt")
 
     stop_time = time.time()
     print(f"Time taken: {(stop_time - start_time):.2f} seconds")
-
